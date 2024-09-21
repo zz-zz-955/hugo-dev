@@ -9,10 +9,10 @@
         <copyright>zz-zz-955</copyright>
         <lastBuildDate>Sat, 21 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/categories/gdb/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>gdb动态调试工具使用（使用pwndbg插件）</title>
-        <link>https://zz-zz-955.github.io/hugo-dev/p/test-chinese/</link>
+        <link>https://zz-zz-955.github.io/hugo-dev/p/gdb%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8pwndbg%E6%8F%92%E4%BB%B6/</link>
         <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://zz-zz-955.github.io/hugo-dev/p/test-chinese/</guid>
+        <guid>https://zz-zz-955.github.io/hugo-dev/p/gdb%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8pwndbg%E6%8F%92%E4%BB%B6/</guid>
         <description>&lt;h2 id=&#34;1加载程序到gdb&#34;&gt;1、加载程序到gdb
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
