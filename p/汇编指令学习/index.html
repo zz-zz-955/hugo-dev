@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="pwn题常见的汇编指令">
+<title>汇编指令学习</title>
+
+<link rel='canonical' href='https://zz-zz-955.github.io/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/'>
+
+<link rel="stylesheet" href="/hugo-dev/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="汇编指令学习">
+<meta property='og:description' content="pwn题常见的汇编指令">
+<meta property='og:url' content='https://zz-zz-955.github.io/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/'>
+<meta property='og:site_name' content='学习笔记博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-21T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="汇编指令学习">
+<meta name="twitter:description" content="pwn题常见的汇编指令">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/hugo-dev/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/hugo-dev/img/avatar_hu6139835954921719983.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤣</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/hugo-dev">学习笔记博客</a></h1>
+            <h2 class="site-description">欢迎来到我的博客，本博客主要记录计算机专业相关的学习笔记，主要是以CTF-PWN为主</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/hugo-dev/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1intel指令">1.Intel指令</a></li>
+    <li><a href="#2mips指令">2.mips指令</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/hugo-dev/categories/pwn/" >
+                Pwn
+            </a>
+        
+            <a href="/hugo-dev/categories/%E6%8A%80%E5%B7%A7/" >
+                技巧
+            </a>
+        
+            <a href="/hugo-dev/categories/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/" >
+                汇编指令
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/">汇编指令学习</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            pwn题常见的汇编指令
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-21</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="1intel指令">1.Intel指令
+</h2><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">指令</th>
+          <th style="text-align: left">描述</th>
+          <th style="text-align: left">例子</th>
+          <th style="text-align: left">解释</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">mov</td>
+          <td style="text-align: left">传送数据</td>
+          <td style="text-align: left">mov rax,18</td>
+          <td style="text-align: left">将18的值传送进rax寄存器(rax = 18)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">add</td>
+          <td style="text-align: left">加法运算</td>
+          <td style="text-align: left">add rax,rbx</td>
+          <td style="text-align: left">rax与rbx的值相加，并存储在rax(rax = rax + rbx)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">sub</td>
+          <td style="text-align: left">减法运算</td>
+          <td style="text-align: left">sub rax,9</td>
+          <td style="text-align: left">rax减9，将结果存储在rax(rax = rax - 9)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">xor</td>
+          <td style="text-align: left">异或运算</td>
+          <td style="text-align: left">xor rax,rax</td>
+          <td style="text-align: left">将rax与rax进行异或处理,等价于：(rax = 0)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">call</td>
+          <td style="text-align: left">调用函数</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">lea</td>
+          <td style="text-align: left">取地址，现在一般用于运算</td>
+          <td style="text-align: left">lea rax,[rbp - 18]</td>
+          <td style="text-align: left">将rbp-18的结果传送到rax(rax = rbp - 18)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">cmp</td>
+          <td style="text-align: left">判断指令，实际作用是做减法运算，通常搭配J开头的命令进行使用</td>
+          <td style="text-align: left">cmp rax,0x61</td>
+          <td style="text-align: left">进行rax - 0x61运算，此命令不会将运算的结果值存储(rax - 0x61)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">movzx</td>
+          <td style="text-align: left">传送数据</td>
+          <td style="text-align: left">movzx rax,BYTE ptr [rbp-0x10]</td>
+          <td style="text-align: left">相当于将rbp-0x10地址的值，取8位数字传送至rax处BYTE:8位WORD:16位DWORD:32位QWORD:64位</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">push</td>
+          <td style="text-align: left">压栈</td>
+          <td style="text-align: left">push ebp</td>
+          <td style="text-align: left">等同于：mov esp,esp - 4mov [esp],ebp[]的作用是取寄存器里的地址指向的<strong>值</strong>没有[]的作用是取寄存器的<strong>地址</strong></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">pop</td>
+          <td style="text-align: left">弹栈</td>
+          <td style="text-align: left">pop ebp</td>
+          <td style="text-align: left">等同于mov ebp,[esp]mov esp,esp+4</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">leave</td>
+          <td style="text-align: left">返回上级函数时，恢复原本栈空间</td>
+          <td style="text-align: left">leave</td>
+          <td style="text-align: left">mov esp,ebppop ebp</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">ret</td>
+          <td style="text-align: left">返回上级函数后，执行上级函数的指令</td>
+          <td style="text-align: left">ret</td>
+          <td style="text-align: left">等同于pop eip（这条指令实际是不存在的，不能直接向RIP寄存器传送数据）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">call</td>
+          <td style="text-align: left">调用指定函数，注意，调用函数时，push eip的值实际上eip下一条指令的地址值</td>
+          <td style="text-align: left">call dofunc</td>
+          <td style="text-align: left">等同于push eipjmp dofunc</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">nop</td>
+          <td style="text-align: left">无操作，仅使ip指令+1，对应的指令是：\x90</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">test</td>
+          <td style="text-align: left">测试指定寄存器中的值与另一个值（常数或寄存器）的按位与操作结果，而不改变寄存器的值。如果结果为零，将设置零标志位ZF。</td>
+          <td style="text-align: left">test rax,rax</td>
+          <td style="text-align: left"></td>
+      </tr>
+  </tbody>
+</table></div>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">指令</th>
+          <th style="text-align: left">描述</th>
+          <th style="text-align: left">标记位</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">JE,JZ</td>
+          <td style="text-align: left">结果为0则跳转（相等时跳转）</td>
+          <td style="text-align: left">ZF=1</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNE,JNZ</td>
+          <td style="text-align: left">结果不为0则跳转（不相等时则跳转）</td>
+          <td style="text-align: left">ZF=0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JS</td>
+          <td style="text-align: left">结果为负跳转</td>
+          <td style="text-align: left">SF=1</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNS</td>
+          <td style="text-align: left">结果为非负跳转</td>
+          <td style="text-align: left">SF=0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JP,JPE</td>
+          <td style="text-align: left">结果中1的个数为偶数则跳转</td>
+          <td style="text-align: left">PF=1</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNP,JPO</td>
+          <td style="text-align: left">结果中1的个数为奇数则跳转</td>
+          <td style="text-align: left">PF=0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JO</td>
+          <td style="text-align: left">结果溢出了则跳转</td>
+          <td style="text-align: left">OF=1</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNO</td>
+          <td style="text-align: left">结果没有溢出则跳转</td>
+          <td style="text-align: left">OF=0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JB,JNAE</td>
+          <td style="text-align: left">小于则跳转（无符号数）</td>
+          <td style="text-align: left">CF=1</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNB,JAE</td>
+          <td style="text-align: left">大于等于则跳转（无符号数）</td>
+          <td style="text-align: left">CF=0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JBE,JNA</td>
+          <td style="text-align: left">小于等于则跳转（无符号数）</td>
+          <td style="text-align: left">CF=1 or ZF=1</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNBE,JA</td>
+          <td style="text-align: left">大于则跳转（无符号数）</td>
+          <td style="text-align: left">CF=0 and ZF=0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JL,JNGE</td>
+          <td style="text-align: left">小于则跳转（有符号数）</td>
+          <td style="text-align: left">SF≠OF</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNL,JGE</td>
+          <td style="text-align: left">大于等于则跳转（有符号数）</td>
+          <td style="text-align: left">SF=OF</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JLE,JNG</td>
+          <td style="text-align: left">小于等于则跳转（有符号数）</td>
+          <td style="text-align: left">ZF=1 or SF≠OF</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">JNLE,JG</td>
+          <td style="text-align: left">大于则跳转（有符号数）</td>
+          <td style="text-align: left">ZF=0 and SF=OF</td>
+      </tr>
+  </tbody>
+</table></div>
+<h2 id="2mips指令">2.mips指令
+</h2><p>寄存器的作用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nv">$0</span><span class="err">：</span><span class="nv">$zero</span>    <span class="n">常量0</span><span class="p">(</span><span class="n">constant</span> <span class="n">value</span> <span class="mf">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$1</span><span class="err">：</span><span class="nv">$at</span>  <span class="n">保留给汇编器</span><span class="p">(</span><span class="n">Reserved</span> <span class="k">for</span> <span class="n">assembler</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$2</span><span class="p">-</span><span class="nv">$3</span><span class="err">：</span><span class="nv">$v0</span><span class="p">-</span><span class="nv">$v1</span>   <span class="n">函数调用返回值</span><span class="p">(</span><span class="n">values</span> <span class="k">for</span> <span class="n">results</span> <span class="n">and</span> <span class="n">expression</span> <span class="n">evaluation</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$4</span><span class="p">-</span><span class="nv">$7</span><span class="err">：</span><span class="nv">$a0</span><span class="p">-</span><span class="nv">$a3</span>   <span class="n">函数调用参数</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$8</span><span class="p">-</span><span class="nv">$15</span><span class="err">：</span><span class="nv">$t0</span><span class="p">-</span><span class="nv">$t7</span>  <span class="n">暂时的</span><span class="p">(</span><span class="n">或随便用的</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$16</span><span class="p">-</span><span class="nv">$23</span><span class="err">：</span><span class="nv">$s0</span><span class="p">-</span><span class="nv">$s7</span> <span class="n">保存的</span><span class="p">(</span><span class="n">或如果用</span><span class="err">，</span><span class="n">需要SAVE</span><span class="p">/</span><span class="n">RESTORE的</span><span class="p">)(</span><span class="n">saved</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$24</span><span class="p">-</span><span class="nv">$25</span><span class="err">：</span><span class="nv">$t8</span><span class="p">-</span><span class="nv">$t9</span> <span class="n">暂时的</span><span class="p">(</span><span class="n">或随便用的</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$28</span><span class="err">：</span><span class="nv">$gp</span> <span class="n">全局指针</span><span class="p">(</span><span class="n">Global</span> <span class="n">Pointer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$29</span><span class="err">：</span><span class="nv">$sp</span> <span class="n">堆栈指针</span><span class="p">(</span><span class="n">Stack</span> <span class="n">Pointer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$30</span><span class="err">：</span><span class="nv">$fp</span><span class="p">/</span><span class="nv">$s8</span> <span class="n">栈帧指针</span><span class="p">(</span><span class="n">Frame</span> <span class="n">Pointer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$31</span><span class="err">：</span><span class="nv">$ra</span> <span class="n">返回地址</span><span class="p">(</span><span class="k">return</span> <span class="n">address</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">指令</th>
+          <th style="text-align: left">描述</th>
+          <th style="text-align: left">例子</th>
+          <th style="text-align: left">解释</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">j</td>
+          <td style="text-align: left">跳转至标签处，相当于jmp指令</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">jr</td>
+          <td style="text-align: left">跳转至寄存器里的地址指向的值，通常函数的返回处使用的指令为jr指令</td>
+          <td style="text-align: left">jr $ra</td>
+          <td style="text-align: left">将pc指令指向$ra寄存器里的值</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">jal</td>
+          <td style="text-align: left">跳转指令，返回地址存储在$ra寄存器中，一般用于函数调用</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">jmp 目标地址mov fp,sp</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">jalr</td>
+          <td style="text-align: left">与jal指令类似，只不过jal的对象为寄存器</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">la</td>
+          <td style="text-align: left">相当于x86的lea</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">sw</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">sw  $ra, 0x5c($sp)</td>
+          <td style="text-align: left">把$ra的内容写入到[$sp+0x5c]中</td>
+      </tr>
+  </tbody>
+</table></div>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/hugo-dev/p/test-chinese/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">gdb动态调试工具使用（使用pwndbg插件）</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/hugo-dev/p/test-chinese/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">2024PolarCTF秋季个人挑战赛-pwn-wp</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 zz-zz-955
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/hugo-dev/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
