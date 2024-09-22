@@ -622,7 +622,7 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;unk&#34;&gt;unk
 &lt;/h2&gt;&lt;h3 id=&#34;题目分析-5&#34;&gt;题目分析：
-&lt;/h3&gt;&lt;p&gt;打开后发现是堆题，题目同时存在UAF和堆溢出，没有额外限制（所以就不贴图了），同时远程libc版本为2.232.23-0ubuntu11.3_amd64，本题解题方法较多:&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;打开后发现是堆题，题目同时存在UAF和堆溢出，没有额外限制（所以就不贴图了），同时远程libc版本为2.23-0ubuntu11.3_amd64，本题解题方法较多:&lt;/p&gt;
 &lt;p&gt;我这边采用UAF漏洞，通过unsortedbin chunk 泄露libc地址，然后通过fastbin attack改写__malloc_hook为one_gadget&lt;/p&gt;
 &lt;h3 id=&#34;exp-5&#34;&gt;exp：
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;

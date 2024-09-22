@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="学习large_bin_attack原理">
+<title>【转载】how2heap-2.23-08-large_bin_attack</title>
+
+<link rel='canonical' href='https://zz-zz-955.github.io/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/'>
+
+<link rel="stylesheet" href="/hugo-dev/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="【转载】how2heap-2.23-08-large_bin_attack">
+<meta property='og:description' content="学习large_bin_attack原理">
+<meta property='og:url' content='https://zz-zz-955.github.io/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/'>
+<meta property='og:site_name' content='学习笔记博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-22T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【转载】how2heap-2.23-08-large_bin_attack">
+<meta name="twitter:description" content="学习large_bin_attack原理">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/hugo-dev/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/hugo-dev/img/avatar_hu6139835954921719983.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤣</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/hugo-dev">学习笔记博客</a></h1>
+            <h2 class="site-description">欢迎来到我的博客，本博客主要记录计算机专业相关的学习笔记，主要是以CTF-PWN为主</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/hugo-dev/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#粗略理解chunkhttpssocsdnnetsosearchqchunkspm1001210130017020进入large-bin的过程先看图解再回头看代码"><strong>粗略理解<a href="https://so.csdn.net/so/search?q=chunk&amp;spm=1001.2101.3001.7020">chunk</a>进入large bin的过程(<code>先看图解，再回头看代码</code>)</strong></a></li>
+    <li><a href="#图解入large-bin链的逻辑">图解入large bin链的逻辑</a>
+      <ol>
+        <li><a href="#large-bin链中放入首个chunkchunk-a">large bin链中放入首个chunk：chunk a</a></li>
+        <li><a href="#放入-size-比-chunk-a-大的-chunk-c">放入 size 比 chunk a 大的 chunk c</a></li>
+        <li><a href="#放入size-比-chunk-a-小的-chunk-b">放入size 比 chunk a 小的 chunk b</a></li>
+        <li><a href="#放入-size-和-chunk-a-一样的-chunk-d">放入 size 和 chunk a 一样的 chunk d</a></li>
+        <li><a href="#放入-size-和-chunk-a-一样的-chunk-e">放入 size 和 chunk a 一样的 chunk e</a></li>
+      </ol>
+    </li>
+    <li><a href="#回顾一下unsafe_unlink和unsorted_bin_attack">回顾一下<code>unsafe_unlink</code>和<code>unsorted_bin_attack</code></a></li>
+    <li><a href="#从large_bin_attack被挖掘出的思路出发只考虑223的源码">从large_bin_attack被挖掘出的思路出发<code>只考虑2.23的源码</code></a>
+      <ol>
+        <li><a href="#1首个chunk入large-bin链">1）首个chunk入large bin链</a></li>
+        <li><a href="#2比最小的chunk还小的chunk入large-bin链">2）比最小的chunk还小的chunk入large bin链</a></li>
+        <li><a href="#3放入相同大小的-chunk">3）放入相同大小的 chunk</a></li>
+        <li><a href="#4放入不和其他chunk-size相等且不是最小的chunk">4）放入不和其他chunk size相等，且不是最小的chunk</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/hugo-dev/categories/pwn/" >
+                Pwn
+            </a>
+        
+            <a href="/hugo-dev/categories/%E6%8A%80%E5%B7%A7/" >
+                技巧
+            </a>
+        
+            <a href="/hugo-dev/categories/%E5%A0%86/" >
+                堆
+            </a>
+        
+            <a href="/hugo-dev/categories/large_bin/" >
+                Large_bin
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/">【转载】how2heap-2.23-08-large_bin_attack</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            学习large_bin_attack原理
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-22</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>本文章转载：<a class="link" href="https://blog.csdn.net/u014679440/article/details/135403233"  target="_blank" rel="noopener"
+    >how2heap-2.23-08-large_bin_attack_pwn largbin图解-CSDN博客</a></p>
+<p>欢迎各位读者前往原文章阅读，本处只用作笔记记录</p>
+<hr>
+<p>pwngdb命令，方便源码调试</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">set</span> context-sections code
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> context-source-code-lines <span class="m">40</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="粗略理解chunkhttpssocsdnnetsosearchqchunkspm1001210130017020进入large-bin的过程先看图解再回头看代码"><strong>粗略理解<a class="link" href="https://so.csdn.net/so/search?q=chunk&amp;spm=1001.2101.3001.7020"  target="_blank" rel="noopener"
+    >chunk</a>进入large bin的过程(<code>先看图解，再回头看代码</code>)</strong>
+</h2><p>下面是从unsorted bin链中取出的chunk，插入到large bin链的代码</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/36e538cc5241acd17f5939cd039690f7.png"
+	width="2058"
+	height="2698"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/36e538cc5241acd17f5939cd039690f7_hu13974368763379011750.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/36e538cc5241acd17f5939cd039690f7_hu14089290469001758852.png 1024w"
+	loading="lazy"
+	
+		alt="36e538cc5241acd17f5939cd039690f7"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="76"
+		data-flex-basis="183px"
+	
+></p>
+<p>基本逻辑如下：</p>
+<ul>
+<li>
+<p>从unsorted bin链中取出的chunk大小，是否属于small bin的大小</p>
+<ul>
+<li>small bin相关的处理</li>
+</ul>
+</li>
+<li>
+<p>从unsorted bin链中取出的chunk大小，是否属于large bin的大小</p>
+<ul>
+<li>计算出当前chunk大小从属的main_arean-&gt;bins的下标</li>
+<li>获取该bins下标的large bin的头结点 <strong>bck</strong></li>
+<li>通过large bin头节点的fd，找到large bin链中size最大的chunk <strong>fwd</strong>（large bin链中第一个chunk）</li>
+<li><strong>当前large bin链不为空（操作的是fd_nextsize和bk_nextsize形成的链）</strong>
+<ul>
+<li>当前chunk的size &lt; large bin链中最小的chunk
+<ul>
+<li><strong>（总结：将当前chunk插入到large bin链的尾部，即插入到最小的chunk的后面）</strong></li>
+<li><strong>fwd = bck;</strong> 令 fwd 指向 large bin 头结点</li>
+<li><strong>bck = bck-&gt;bk;</strong> 令 bck 指向 largin bin 尾部 chunk，就是当前已在large bin链中最小的这个chunk</li>
+<li><strong>victim-&gt;fd_nextsize = fwd-&gt;fd;</strong> 当前chunk 的 fd_nextsize 指向 largin bin 的第一个 chunk</li>
+<li><strong>victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;</strong> 当前chunk的 bk_nextsize 指向原来链表的第一个 chunk 指向的 bk_nextsize（当前chunk的bk_nextsize指向原先最小的chunk）</li>
+<li><strong>fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</strong>
+<ul>
+<li><strong>victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</strong> 原先最小chunk的fd_nextsize指向当前chunk</li>
+<li><strong>fwd-&gt;fd-&gt;bk_nextsize = victim</strong> large bin中第一个chunk的bk_nextsize指向当前chunk</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当前chunk的size <strong>&gt;=</strong> large bin链中最小的chunk
+<ul>
+<li>从large bin链中size最大的chunk <strong>fwd</strong>（large bin链中第一个chunk），从大到小遍历，找到首个不大于当前chunk的chunk</li>
+<li>如果找到的chunk的大小<strong>等于</strong>当前chunk
+<ul>
+<li>**fwd = fwd-&gt;fd;**将当前chunk 插入到该chunk的后面，并不修改 nextsize 指针</li>
+</ul>
+</li>
+<li>如果找到的chunk的大小<strong>小于</strong>当前chunk
+<ul>
+<li><strong>victim-&gt;fd_nextsize = fwd;</strong> 当前chunk的fd_nextsize指向这个找到的chunk</li>
+<li><strong>victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</strong> 当前chunk的bk_nextsize指向这个找到的chunk的bk_nextsize</li>
+<li><strong>fwd-&gt;bk_nextsize = victim;</strong> 找到chunk的bk_nextsize指向当前chunk</li>
+<li><strong>victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</strong> 找到chunk原先前面的chunk的fd_nextsize指向当前chunk</li>
+</ul>
+</li>
+<li>获取找到的chunk的前面的一个chunk（通过bk找到当前chunk插入前，最小的比找到的chunk大的chunk）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>当前large bin链为空（操作的是fd_nextsize和bk_nextsize形成的链）</strong>
+<ul>
+<li>当前chunk的<strong>fd_nextsize</strong>和<strong>bk_nextsize</strong>均指向自己</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>将当前chunk链入large bin链中（<strong>fd,bk形成的链</strong>）</p>
+</li>
+</ul>
+<h2 id="图解入large-bin链的逻辑">图解入large bin链的逻辑
+</h2><h3 id="large-bin链中放入首个chunkchunk-a">large bin链中放入首个chunk：chunk a
+</h3><p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/34806ef2c5d24541e1325ac499ef8f29.png"
+	width="1762"
+	height="726"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/34806ef2c5d24541e1325ac499ef8f29_hu7141144734264779177.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/34806ef2c5d24541e1325ac499ef8f29_hu6407402079148285155.png 1024w"
+	loading="lazy"
+	
+		alt="34806ef2c5d24541e1325ac499ef8f29"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="582px"
+	
+></p>
+<p>这里fd,bk,fd_nextsize,bk_nextsize指向都是chunk的首地址</p>
+<hr>
+<h3 id="放入-size-比-chunk-a-大的-chunk-c">放入 size 比 chunk a 大的 chunk c
+</h3><p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/b445c0f0f67a125fb292a68730edef08.png"
+	width="2374"
+	height="732"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/b445c0f0f67a125fb292a68730edef08_hu5198426007794013662.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/b445c0f0f67a125fb292a68730edef08_hu1963059223505292965.png 1024w"
+	loading="lazy"
+	
+		alt="b445c0f0f67a125fb292a68730edef08"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="324"
+		data-flex-basis="778px"
+	
+></p>
+<p>large bin fd总是指向size最大的chunk</p>
+<p>large bin bk总是指向size最小的chunk</p>
+<p>large bin链中的chunk，通过large bin fd <strong>从大到小排序</strong></p>
+<hr>
+<h3 id="放入size-比-chunk-a-小的-chunk-b">放入size 比 chunk a 小的 chunk b
+</h3><p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/e8dcd406b5b945b9d0c22ee1900900bd.png"
+	width="2686"
+	height="706"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/e8dcd406b5b945b9d0c22ee1900900bd_hu15149668852582874164.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/e8dcd406b5b945b9d0c22ee1900900bd_hu14764079343892417767.png 1024w"
+	loading="lazy"
+	
+		alt="e8dcd406b5b945b9d0c22ee1900900bd"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="380"
+		data-flex-basis="913px"
+	
+></p>
+<p>large bin链中的chunk，通过large bin fd 从大到小排序</p>
+<p>只不过在代码实现中，通过large bin bk 快速来实现这一步</p>
+<hr>
+<h3 id="放入-size-和-chunk-a-一样的-chunk-d">放入 size 和 chunk a 一样的 chunk d
+</h3><p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/3b6a93bfd37ac402606b9e0caa4398c8.png"
+	width="2734"
+	height="742"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/3b6a93bfd37ac402606b9e0caa4398c8_hu9190845489589465213.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/3b6a93bfd37ac402606b9e0caa4398c8_hu15501363495025481333.png 1024w"
+	loading="lazy"
+	
+		alt="3b6a93bfd37ac402606b9e0caa4398c8"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="368"
+		data-flex-basis="884px"
+	
+></p>
+<p>在代码中，有这么一个注释：</p>
+<p><em><em>/</em> Always insert in the second position. <em>/，</em></em></p>
+<p>就是大小相同的chunk，紧临着相同大小首个进入large bin链的chunk放置（<strong><code>可以看下面chunk e一起理解</code></strong>）</p>
+<p>大小相同（<strong><code>重复</code></strong>）的chunk，不会有fd_nextsize，bk_nextsize（<strong><code>忘掉横向链，竖向链</code></strong>）</p>
+<hr>
+<h3 id="放入-size-和-chunk-a-一样的-chunk-e">放入 size 和 chunk a 一样的 chunk e
+</h3><p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/236b0f1cfddcf7aca032ade072b7ef14.png"
+	width="2726"
+	height="648"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/236b0f1cfddcf7aca032ade072b7ef14_hu9072674553926082462.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/236b0f1cfddcf7aca032ade072b7ef14_hu6561985239343014857.png 1024w"
+	loading="lazy"
+	
+		alt="236b0f1cfddcf7aca032ade072b7ef14"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="420"
+		data-flex-basis="1009px"
+	
+></p>
+<p>如上情况就是**<code>入large bin链的所有逻辑</code>**</p>
+<hr>
+<h2 id="回顾一下unsafe_unlink和unsorted_bin_attack">回顾一下<code>unsafe_unlink</code>和<code>unsorted_bin_attack</code>
+</h2><p><a class="link" href="https://blog.csdn.net/u014679440/article/details/135389798"  target="_blank" rel="noopener"
+    >how2heap-2.23-05-unsorted_bin_attack</a></p>
+<p><a class="link" href="https://blog.csdn.net/u014679440/article/details/135393913"  target="_blank" rel="noopener"
+    >how2heap-2.23-06-unsorted_bin_into_stack</a></p>
+<p><code>unsafe_unlink</code> 是因为一个<code>被破坏</code>的chunk脱链，重新修整指针时引发的问题</p>
+<p><code>unsorted_bin_attack</code> 也是一个<code>被破坏</code>的chunk脱链，重新修整指针时引发的问题</p>
+<p><code>large_bin_attack</code>原理与上面的两个差不多，是一个chunk入链，与一个**<code>被破坏</code>**的chunk重新修整指针时引发的问题</p>
+<h2 id="从large_bin_attack被挖掘出的思路出发只考虑223的源码">从large_bin_attack被挖掘出的思路出发<code>只考虑2.23的源码</code>
+</h2><p>unsorted bin chunk进入large bin链的四种逻辑：</p>
+<ul>
+<li>large bin链为空，chunk进入large bin链</li>
+<li>chunk的size比large bin链中size最小的chunk还要小</li>
+<li>large bin中存在和chunk size一样大小的chunk</li>
+<li>chunk的size大于large bin链中size最小的chunk</li>
+</ul>
+<p>large bin chunk出large bin链</p>
+<ul>
+<li>从恰好大小合适的largebin中获取chunk，发生unlink</li>
+<li>从比malloc要求大的largebin中取chunk，发生unlink</li>
+</ul>
+<p>好像入链归于<code>large_bin_attack</code>，出链归于<code>unsafe_unlink</code>，不清楚，只看入链的逻辑</p>
+<hr>
+<p>下面<code>通过被破坏的large bin chunk实现漏洞利用</code>的角度来观察不同入链的逻辑（<code>一般是堆溢出修改large bin的fd,bk,fd_nextsize,bk_nextsize</code>）</p>
+<h3 id="1首个chunk入large-bin链">1）首个chunk入large bin链
+</h3><p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/6b62ffd1dc822e9c7780d86c48c3f599.png"
+	width="798"
+	height="474"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/6b62ffd1dc822e9c7780d86c48c3f599_hu44760789201679464.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/6b62ffd1dc822e9c7780d86c48c3f599_hu13696846881146030834.png 1024w"
+	loading="lazy"
+	
+		alt="6b62ffd1dc822e9c7780d86c48c3f599"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="404px"
+	
+></p>
+<ul>
+<li>此时还没有被破坏的chunk</li>
+<li>large bin fd，large bin bk 指向这个chunk的首地址</li>
+<li>chunk的fd,bk指向large bin 头结点的首地址</li>
+<li>fd_nextsize，bk_nextsize指向chunk自身</li>
+</ul>
+<p>这里没有利用场景</p>
+<hr>
+<h3 id="2比最小的chunk还小的chunk入large-bin链">2）比最小的chunk还小的chunk入large bin链
+</h3><p>先看看该入链逻辑所涉及的代码，<code>寻找可被破坏-用于利用的chunk(从而有堆溢出产生时，构造这种堆结构)</code>，<code>以及利用方式</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">victim_index</span> <span class="o">=</span> <span class="nf">largebin_index</span> <span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bck</span> <span class="o">=</span> <span class="nf">bin_at</span> <span class="p">(</span><span class="n">av</span><span class="p">,</span> <span class="n">victim_index</span><span class="p">);</span>	<span class="err">【</span><span class="mi">1</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fwd</span> <span class="o">=</span> <span class="n">bck</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">;</span>						<span class="err">【</span><span class="mi">2</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fwd</span> <span class="o">!=</span> <span class="n">bck</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">bck</span><span class="o">-&gt;</span><span class="n">bk</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fwd</span> <span class="o">=</span> <span class="n">bck</span><span class="p">;</span>				  <span class="err">【</span><span class="mi">3</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bck</span> <span class="o">=</span> <span class="n">bck</span><span class="o">-&gt;</span><span class="n">bk</span><span class="p">;</span>			  <span class="err">【</span><span class="mi">4</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">victim</span><span class="o">-&gt;</span><span class="n">fd_nextsize</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">;</span> 										<span class="err">【</span><span class="mi">5</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">            <span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">fd</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span><span class="p">;</span>							<span class="err">【</span><span class="mi">6</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">fd</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span> <span class="o">=</span> <span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span><span class="o">-&gt;</span><span class="n">fd_nextsize</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>	<span class="err">【</span><span class="mi">7</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">mark_bin</span> <span class="p">(</span><span class="n">av</span><span class="p">,</span> <span class="n">victim_index</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk</span> <span class="o">=</span> <span class="n">bck</span><span class="p">;</span>					<span class="err">【</span><span class="mi">8</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">victim</span><span class="o">-&gt;</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">;</span>					<span class="err">【</span><span class="mi">9</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>					<span class="err">【</span><span class="mi">10</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">bck</span><span class="o">-&gt;</span><span class="n">fd</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>					<span class="err">【</span><span class="mi">11</span><span class="err">】</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>【0】victim为要入链的chunk</p>
+</li>
+<li>
+<p>【1】bck为large bin链的头结点，这个位置是一个固定死的值（除非篡改了arena的位置）</p>
+</li>
+<li>
+<p>【2】fwd为large bin链中size最大的chunk，也就是紧挨着large bin头结点的chunk</p>
+</li>
+<li>
+<p>【3】fwd为large bin链的头结点</p>
+</li>
+<li>
+<p>【4】bck为large bin链中size最小的chunk</p>
+</li>
+</ul>
+<p>现在bck，victim，fwd，三要素集齐，下面就是构造如下的双链
+<img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/a8ebb4a2548e2bd99b654004f5654f77.png"
+	width="2012"
+	height="848"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/a8ebb4a2548e2bd99b654004f5654f77_hu15490640466158598854.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/a8ebb4a2548e2bd99b654004f5654f77_hu17505194524385406779.png 1024w"
+	loading="lazy"
+	
+		alt="a8ebb4a2548e2bd99b654004f5654f77"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="569px"
+	
+></p>
+<p>考虑到fwd时large bin链的头结点，实际的图形如下的两种形式</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/3678eb55047ce02e4e53bf7212753f8d.png"
+	width="3036"
+	height="1862"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/3678eb55047ce02e4e53bf7212753f8d_hu12940428285053146007.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/3678eb55047ce02e4e53bf7212753f8d_hu5716420866551479797.png 1024w"
+	loading="lazy"
+	
+		alt="3678eb55047ce02e4e53bf7212753f8d"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="391px"
+	
+></p>
+<ul>
+<li>
+<p>【5】**<code>victim-&gt;fd_nextsize = fwd-&gt;fd; </code>**fwd为large bin链的头结点，fwd-&gt;fd指向的是一个chunk的地址，即size最大的chunk（如果原先large bin链中只有一个chunk，就是指向的那个size最小的chunk的地址），这里没有办法伪造</p>
+</li>
+<li>
+<p>【6】<strong><code>victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;</code></strong> 与【5】中描述的类似，fwd-&gt;fd指向的是与large bin头节点最近的chunk，而<code> fwd-&gt;fd-&gt;bk_nextsize</code>是该chunk中的数据，如果有堆溢出漏洞，就可以篡改这个chunk的<code>bk_nextsize</code>字段，并赋值给要链入的chunk的<code>bk_nextsize</code>字段</p>
+</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/8feef4f475efad6f2be4cf6b7ee6dcec.png"
+	width="3064"
+	height="1852"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/8feef4f475efad6f2be4cf6b7ee6dcec_hu11742313936659793149.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/8feef4f475efad6f2be4cf6b7ee6dcec_hu8042239843748935951.png 1024w"
+	loading="lazy"
+	
+		alt="8feef4f475efad6f2be4cf6b7ee6dcec"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="397px"
+	
+></p>
+<ul>
+<li>【7】<code>fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</code></li>
+</ul>
+<p>分成两部分看</p>
+<ul>
+<li><code>fwd-&gt;fd-&gt;bk_nextsize = victim</code></li>
+</ul>
+<p>仅是给紧挨着large bin头结点的chunk的<code>bk_nextsize</code>字段赋值</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/162bdd6a3b61de5c42552cc2c4cb7263.png"
+	width="2982"
+	height="1844"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/162bdd6a3b61de5c42552cc2c4cb7263_hu7065675984726749041.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/162bdd6a3b61de5c42552cc2c4cb7263_hu8287660435822978753.png 1024w"
+	loading="lazy"
+	
+		alt="162bdd6a3b61de5c42552cc2c4cb7263"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<hr>
+<p><code>victim-&gt;bk_nextsize-&gt;fd_nextsize = victim</code></p>
+<p>对篡改的<code>bk_nextsize</code> chunk的<code>fd_nextsize</code>字段赋值为<code>victim</code></p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/675c59cea5a6ffa1cd41cc15051d1dd7.png"
+	width="3384"
+	height="1758"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/675c59cea5a6ffa1cd41cc15051d1dd7_hu17012682534719803251.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/675c59cea5a6ffa1cd41cc15051d1dd7_hu8519939268490376077.png 1024w"
+	loading="lazy"
+	
+		alt="675c59cea5a6ffa1cd41cc15051d1dd7"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<hr>
+<p>如果有一个<code>unsigned long stack_var = 0;</code>变量，将篡改的bk_nextsize赋值为<code>(unsigned long )(&amp;stack_var -4)</code>，那就可以修改这个变量的值了</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/d4990d14497406ac0623f298c1992d68.png"
+	width="3242"
+	height="1642"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/d4990d14497406ac0623f298c1992d68_hu13303108393885049726.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/d4990d14497406ac0623f298c1992d68_hu4528824722873180623.png 1024w"
+	loading="lazy"
+	
+		alt="d4990d14497406ac0623f298c1992d68"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="473px"
+	
+></p>
+<hr>
+<p>【8】，【9】，【10】，【11】都是不能控制的</p>
+<hr>
+<p>下面是相关代码，可以自己调试看看</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;malloc.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// OK
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;begin test</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">stack_var</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x410</span><span class="p">);</span> <span class="c1">//largebin
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x10</span><span class="p">);</span> <span class="c1">//to separate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x400</span><span class="p">);</span> <span class="c1">//unsortedbin
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x10</span><span class="p">);</span> <span class="c1">//to separate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">free</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span> <span class="c1">//Release p1 into largebin
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">free</span><span class="p">(</span><span class="n">p2</span><span class="p">);</span>  <span class="c1">//Release p2 into unsortedbin
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">p1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="p">)(</span><span class="o">&amp;</span><span class="n">stack_var</span> <span class="o">-</span><span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;malloc.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// OK
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;begin test</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">stack_var</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x420</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x410</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span><span class="n">p3</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x400</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">p2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">p3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">p1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="p">)(</span><span class="o">&amp;</span><span class="n">stack_var</span> <span class="o">-</span><span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="3放入相同大小的-chunk">3）放入相同大小的 chunk
+</h3><p>所涉及的代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">    <span class="n">victim_index</span> <span class="o">=</span> <span class="nf">largebin_index</span> <span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bck</span> <span class="o">=</span> <span class="nf">bin_at</span> <span class="p">(</span><span class="n">av</span><span class="p">,</span> <span class="n">victim_index</span><span class="p">);</span>	<span class="err">【</span><span class="mi">1</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fwd</span> <span class="o">=</span> <span class="n">bck</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">;</span>						<span class="err">【</span><span class="mi">2</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fwd</span> <span class="o">!=</span> <span class="n">bck</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">size</span> <span class="o">|=</span> <span class="n">PREV_INUSE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">bck</span><span class="o">-&gt;</span><span class="n">bk</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">          <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">fwd</span><span class="p">))</span>	<span class="err">【</span><span class="mi">3</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">              <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fwd</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">fd_nextsize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">size</span> <span class="o">==</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">fwd</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">              <span class="cm">/* Always insert in the second position.  */</span>
+</span></span><span class="line"><span class="cl">              <span class="n">fwd</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">;</span>	<span class="err">【</span><span class="mi">4</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">              <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bck</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk</span><span class="p">;</span>		<span class="err">【</span><span class="mi">5</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">mark_bin</span> <span class="p">(</span><span class="n">av</span><span class="p">,</span> <span class="n">victim_index</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk</span> <span class="o">=</span> <span class="n">bck</span><span class="p">;</span>	<span class="err">【</span><span class="mi">6</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">victim</span><span class="o">-&gt;</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">;</span>	<span class="err">【</span><span class="mi">7</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>	<span class="err">【</span><span class="mi">8</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">bck</span><span class="o">-&gt;</span><span class="n">fd</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>	<span class="err">【</span><span class="mi">9</span><span class="err">】</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>【1】<code>bck</code>为large bin链的头结点，这个位置是一个固定死的值（<code>除非篡改了arena的位置</code>）</p>
+</li>
+<li>
+<p>【2】<code>fwd</code>为large bin链中size最大的chunk，也就是紧挨着large bin头结点的chunk</p>
+</li>
+<li>
+<p>【3】通过<code>fwd</code>从大到小，寻找到第一个不大于victim size的chunk</p>
+</li>
+</ul>
+<p>如下就是fwd和victim</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/89390331a276c8ebc109b89271cb6f4e.png"
+	width="1176"
+	height="854"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/89390331a276c8ebc109b89271cb6f4e_hu3905879351859531984.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/89390331a276c8ebc109b89271cb6f4e_hu14538882641958522036.png 1024w"
+	loading="lazy"
+	
+		alt="89390331a276c8ebc109b89271cb6f4e"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
+	
+></p>
+<ul>
+<li>【4】如果fwd和victim大小相等，就会把fwd中的fd取出来用，从上图可以可以想到，假设存在堆溢出漏洞，那就可以修改fwd-&gt;fd</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/2f78989734f20d4fd377add09b40f291.png"
+	width="1820"
+	height="866"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/2f78989734f20d4fd377add09b40f291_hu14554629413838056955.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/2f78989734f20d4fd377add09b40f291_hu8990785646220252247.png 1024w"
+	loading="lazy"
+	
+		alt="2f78989734f20d4fd377add09b40f291"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="504px"
+	
+></p>
+<p>经过赋值，伪造的fd指向的chunk，成为fwd</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/faa20c51de2f09eb52a469c957f1cc61.png"
+	width="1890"
+	height="848"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/faa20c51de2f09eb52a469c957f1cc61_hu8251848277171569995.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/faa20c51de2f09eb52a469c957f1cc61_hu7692204992479141278.png 1024w"
+	loading="lazy"
+	
+		alt="faa20c51de2f09eb52a469c957f1cc61"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="222"
+		data-flex-basis="534px"
+	
+></p>
+<ul>
+<li>【5】将伪造的fwd的bk取出，作为bck</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/6af7dbe7e4f835700329fe1ac4cacec2.png"
+	width="1932"
+	height="730"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/6af7dbe7e4f835700329fe1ac4cacec2_hu13554246842071478452.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/6af7dbe7e4f835700329fe1ac4cacec2_hu5513795603197046124.png 1024w"
+	loading="lazy"
+	
+		alt="6af7dbe7e4f835700329fe1ac4cacec2"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="264"
+		data-flex-basis="635px"
+	
+></p>
+<p>这里有个问题，伪造的fwd chunk的bk字段必须是要有内容的，最好是个可写内存的地址，否则执行【9】时程序会崩溃</p>
+<ul>
+<li>
+<p>【6】，【7】给victim chunk的bk,fd赋值，这个不管</p>
+</li>
+<li>
+<p>【8】，伪造的fwd chunk的bk赋值为victim chunk的地址</p>
+</li>
+<li>
+<p>【9】，这个太不稳定了，不管</p>
+</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/1af568f145eead33bcc50dc012674fd0.png"
+	width="1624"
+	height="606"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/1af568f145eead33bcc50dc012674fd0_hu9818193388571271825.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/1af568f145eead33bcc50dc012674fd0_hu3495407166868515293.png 1024w"
+	loading="lazy"
+	
+		alt="1af568f145eead33bcc50dc012674fd0"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="643px"
+	
+></p>
+<hr>
+<p>这种攻击场景，适用于覆盖栈中保存的堆地址的变量，将其保存的堆地址修改为victim chunk的地址</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;malloc.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;begin</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span><span class="o">*</span> <span class="n">test_chunk</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span> <span class="n">a</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x410</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span><span class="n">b</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x410</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span> <span class="n">victim</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x400</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="p">)(</span><span class="o">&amp;</span><span class="n">test_chunk</span> <span class="o">-</span><span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;before vuln</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;after vuln</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">memset</span><span class="p">(</span><span class="n">test_chunk</span><span class="p">,</span> <span class="sc">&#39;a&#39;</span><span class="p">,</span> <span class="mh">0x900</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">show_array</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">memcpy</span><span class="p">(</span><span class="n">show_array</span><span class="p">,</span> <span class="n">victim</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">show_array</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4放入不和其他chunk-size相等且不是最小的chunk">4）放入不和其他chunk size相等，且不是最小的chunk
+</h3><p>所涉及的代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">victim_index</span> <span class="o">=</span> <span class="nf">largebin_index</span> <span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bck</span> <span class="o">=</span> <span class="nf">bin_at</span> <span class="p">(</span><span class="n">av</span><span class="p">,</span> <span class="n">victim_index</span><span class="p">);</span>	<span class="err">【</span><span class="mi">1</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fwd</span> <span class="o">=</span> <span class="n">bck</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">;</span>						<span class="err">【</span><span class="mi">2</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fwd</span> <span class="o">!=</span> <span class="n">bck</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">size</span> <span class="o">|=</span> <span class="n">PREV_INUSE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">bck</span><span class="o">-&gt;</span><span class="n">bk</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">          <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">fwd</span><span class="p">))</span>	<span class="err">【</span><span class="mi">3</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">              <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fwd</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">fd_nextsize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">size</span> <span class="o">==</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="nf">chunksize_nomask</span> <span class="p">(</span><span class="n">fwd</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">              <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">victim</span><span class="o">-&gt;</span><span class="n">fd_nextsize</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">;</span>					<span class="err">【</span><span class="mi">4</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">                <span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span><span class="p">;</span>		<span class="err">【</span><span class="mi">5</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>					<span class="err">【</span><span class="mi">6</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">                <span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk_nextsize</span><span class="o">-&gt;</span><span class="n">fd_nextsize</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>	<span class="err">【</span><span class="mi">7</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bck</span> <span class="o">=</span> <span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk</span><span class="p">;</span>									<span class="err">【</span><span class="mi">8</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">mark_bin</span> <span class="p">(</span><span class="n">av</span><span class="p">,</span> <span class="n">victim_index</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">victim</span><span class="o">-&gt;</span><span class="n">bk</span> <span class="o">=</span> <span class="n">bck</span><span class="p">;</span>											<span class="err">【</span><span class="mi">9</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">victim</span><span class="o">-&gt;</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">;</span>											<span class="err">【</span><span class="mi">10</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">fwd</span><span class="o">-&gt;</span><span class="n">bk</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>											<span class="err">【</span><span class="mi">11</span><span class="err">】</span>
+</span></span><span class="line"><span class="cl"><span class="n">bck</span><span class="o">-&gt;</span><span class="n">fd</span> <span class="o">=</span> <span class="n">victim</span><span class="p">;</span>											<span class="err">【</span><span class="mi">12</span><span class="err">】</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>【1】bck为large bin链的头结点，这个位置是一个固定死的值（除非篡改了arena的位置）</p>
+</li>
+<li>
+<p>【2】fwd为large bin链中size最大的chunk，也就是紧挨着large bin头结点的chunk</p>
+</li>
+<li>
+<p>【3】通过fwd从大到小，寻找到第一个不大于victim size的chunk</p>
+</li>
+</ul>
+<p>如下就是fwd和victim</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/f306f7275f9502ebf816d98261845cd1.png"
+	width="1076"
+	height="746"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/f306f7275f9502ebf816d98261845cd1_hu13079173590091857083.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/f306f7275f9502ebf816d98261845cd1_hu3889917296599548453.png 1024w"
+	loading="lazy"
+	
+		alt="f306f7275f9502ebf816d98261845cd1"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="346px"
+	
+></p>
+<p>假设存在堆溢出漏洞，可以溢出修改fwd中的数据</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/ce3cc071c495ebad37d7256f2b69a2c4.png"
+	width="1048"
+	height="726"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/ce3cc071c495ebad37d7256f2b69a2c4_hu6519151065381319238.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/ce3cc071c495ebad37d7256f2b69a2c4_hu7142144454872384626.png 1024w"
+	loading="lazy"
+	
+		alt="ce3cc071c495ebad37d7256f2b69a2c4"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="346px"
+	
+></p>
+<ul>
+<li>
+<p>【4】victim-&gt;fd_nextsize = fwd，victim的fd_nextsize存储fwd chunk的首地址，这个没有办法伪造</p>
+</li>
+<li>
+<p>【5】victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize，victim的bk_nextsize存储fwd chunk中伪造的bk_nextsize</p>
+</li>
+<li>
+<p>【6】fwd-&gt;bk_nextsize = victim，fwd的bk_nextsize字段赋值为victim chunk的首地址，这个正常</p>
+</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/d557e119b4b1b32e1dc2648e386ebc43.png"
+	width="1722"
+	height="848"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/d557e119b4b1b32e1dc2648e386ebc43_hu3427903939881078467.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/d557e119b4b1b32e1dc2648e386ebc43_hu15209026696158423897.png 1024w"
+	loading="lazy"
+	
+		alt="d557e119b4b1b32e1dc2648e386ebc43"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+></p>
+<ul>
+<li>【7】<code>victim-&gt;bk_nextsize-&gt;fd_nextsize = victim</code>，将伪造的bk_nextsize chunk的fd_nextsize字段覆盖为victim chunk的首地址</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/a84445ad2128261cffcd228854ee166b.png"
+	width="1740"
+	height="860"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/a84445ad2128261cffcd228854ee166b_hu17699517553268767529.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/a84445ad2128261cffcd228854ee166b_hu8099628688586740514.png 1024w"
+	loading="lazy"
+	
+		alt="a84445ad2128261cffcd228854ee166b"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<ul>
+<li>【8】<code>bck = fwd-&gt;bk</code>，bck指向fwd伪造的bk</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/1daf91ac4b10b5ca9a9414cf14c83bc3.png"
+	width="2310"
+	height="878"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/1daf91ac4b10b5ca9a9414cf14c83bc3_hu7378533843860919094.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/1daf91ac4b10b5ca9a9414cf14c83bc3_hu5684451182245452440.png 1024w"
+	loading="lazy"
+	
+		alt="1daf91ac4b10b5ca9a9414cf14c83bc3"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="631px"
+	
+></p>
+<ul>
+<li>【8】和【9】，给victim chunk 的fd和bk赋值</li>
+<li>【11】给fwd的bk字段赋值</li>
+<li>【12】给伪造的bk chunk的fd字段赋值为victim chunk的首地址</li>
+</ul>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/12841d3da686abb373e8ed170b19fae9.png"
+	width="2082"
+	height="774"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/12841d3da686abb373e8ed170b19fae9_hu16418837244472119115.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/12841d3da686abb373e8ed170b19fae9_hu18346815329711798703.png 1024w"
+	loading="lazy"
+	
+		alt="12841d3da686abb373e8ed170b19fae9"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="268"
+		data-flex-basis="645px"
+	
+></p>
+<p>如果存在两个变量（一个也行）stack_var1，stack_var2</p>
+<p>通过堆溢出漏洞，将fwd的bk修改为&amp;stack_var1-2，fwd的bk_nextsize修改为&amp;stack_var2-4，则stack_var1和stack_var2存储的内容在漏洞触发后都能修改为victim chunk的首地址</p>
+<p><img src="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/8e524380f9bb604d44e0c42b9a3e02f8.png"
+	width="2052"
+	height="622"
+	srcset="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/8e524380f9bb604d44e0c42b9a3e02f8_hu5294176339338926471.png 480w, /hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/8e524380f9bb604d44e0c42b9a3e02f8_hu12024570935477629374.png 1024w"
+	loading="lazy"
+	
+		alt="8e524380f9bb604d44e0c42b9a3e02f8"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="329"
+		data-flex-basis="791px"
+	
+></p>
+<hr>
+<p>测试代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;malloc.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;begin test</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">stack_var1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">stack_var2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x410</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x420</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">p2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="p">)(</span><span class="o">&amp;</span><span class="n">stack_var1</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="p">)(</span><span class="o">&amp;</span><span class="n">stack_var2</span> <span class="o">-</span> <span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x470</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在how2heap中的large_bin_attack应该可以完全理解了</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/hugo-dev/p/gdb%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8pwndbg%E6%8F%92%E4%BB%B6/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">gdb动态调试工具使用（使用pwndbg插件）</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/hugo-dev/p/pwn-%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">pwn-常见汇编指令学习</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/hugo-dev/p/test-chinese/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">2024PolarCTF秋季个人挑战赛-pwn-wp</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 zz-zz-955
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/hugo-dev/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

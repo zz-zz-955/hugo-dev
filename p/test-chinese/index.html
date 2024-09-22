@@ -985,7 +985,7 @@
 </div>
 </div><h2 id="unk">unk
 </h2><h3 id="题目分析-5">题目分析：
-</h3><p>打开后发现是堆题，题目同时存在UAF和堆溢出，没有额外限制（所以就不贴图了），同时远程libc版本为2.232.23-0ubuntu11.3_amd64，本题解题方法较多:</p>
+</h3><p>打开后发现是堆题，题目同时存在UAF和堆溢出，没有额外限制（所以就不贴图了），同时远程libc版本为2.23-0ubuntu11.3_amd64，本题解题方法较多:</p>
 <p>我这边采用UAF漏洞，通过unsortedbin chunk 泄露libc地址，然后通过fastbin attack改写__malloc_hook为one_gadget</p>
 <h3 id="exp-5">exp：
 </h3><div class="highlight"><div class="chroma">
@@ -1162,6 +1162,19 @@
             
                 
 <article class="">
+    <a href="/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【转载】how2heap-2.23-08-large_bin_attack</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/hugo-dev/p/gdb%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8pwndbg%E6%8F%92%E4%BB%B6/">
         
         
@@ -1175,12 +1188,12 @@
             
                 
 <article class="">
-    <a href="/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/">
+    <a href="/hugo-dev/p/pwn-%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">汇编指令学习</h2>
+            <h2 class="article-title">pwn-常见汇编指令学习</h2>
         </div>
     </a>
 </article>

@@ -3,12 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://zz-zz-955.github.io/hugo-dev/</loc>
-    <lastmod>2024-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://zz-zz-955.github.io/hugo-dev/p/test-chinese/</loc>
-    <lastmod>2024-09-21T00:00:00+00:00</lastmod>
+    <loc>https://zz-zz-955.github.io/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://zz-zz-955.github.io/hugo-dev/categories/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://zz-zz-955.github.io/hugo-dev/categories/large_bin/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://zz-zz-955.github.io/hugo-dev/post/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://zz-zz-955.github.io/hugo-dev/categories/pwn/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://zz-zz-955.github.io/hugo-dev/categories/%E5%A0%86/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://zz-zz-955.github.io/hugo-dev/categories/%E6%8A%80%E5%B7%A7/</loc>
+    <lastmod>2024-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://zz-zz-955.github.io/hugo-dev/p/test-chinese/</loc>
     <lastmod>2024-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://zz-zz-955.github.io/hugo-dev/categories/gdb/</loc>
@@ -17,10 +35,7 @@
     <loc>https://zz-zz-955.github.io/hugo-dev/p/gdb%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8pwndbg%E6%8F%92%E4%BB%B6/</loc>
     <lastmod>2024-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://zz-zz-955.github.io/hugo-dev/post/</loc>
-    <lastmod>2024-09-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://zz-zz-955.github.io/hugo-dev/categories/pwn/</loc>
+    <loc>https://zz-zz-955.github.io/hugo-dev/p/pwn-%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2024-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://zz-zz-955.github.io/hugo-dev/categories/pwndbg/</loc>
@@ -30,12 +45,6 @@
     <lastmod>2024-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://zz-zz-955.github.io/hugo-dev/categories/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/</loc>
-    <lastmod>2024-09-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://zz-zz-955.github.io/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2024-09-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://zz-zz-955.github.io/hugo-dev/categories/%E6%8A%80%E5%B7%A7/</loc>
     <lastmod>2024-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://zz-zz-955.github.io/hugo-dev/page/</loc>

@@ -8,11 +8,11 @@
         <language>zh-cn</language>
         <copyright>zz-zz-955</copyright>
         <lastBuildDate>Sat, 21 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/categories/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>汇编指令学习</title>
-        <link>https://zz-zz-955.github.io/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</link>
+        <title>pwn-常见汇编指令学习</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/p/pwn-%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</link>
         <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://zz-zz-955.github.io/hugo-dev/p/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</guid>
+        <guid>https://zz-zz-955.github.io/hugo-dev/p/pwn-%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</guid>
         <description>&lt;h2 id=&#34;1intel指令&#34;&gt;1.Intel指令
 &lt;/h2&gt;&lt;table&gt;
   &lt;thead&gt;
@@ -285,6 +285,7 @@
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;p&gt;后续有待补充&amp;hellip; &amp;hellip;&lt;/p&gt;
 </description>
         </item>
         

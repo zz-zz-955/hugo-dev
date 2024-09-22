@@ -7,20 +7,44 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>zz-zz-955</copyright>
-        <lastBuildDate>Sat, 21 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/categories/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Gdb</title>
-        <link>https://zz-zz-955.github.io/hugo-dev/categories/gdb/</link>
-        <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
+        <lastBuildDate>Sun, 22 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Large_bin</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/categories/large_bin/</link>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://zz-zz-955.github.io/hugo-dev/categories/gdb/</guid>
+        <guid>https://zz-zz-955.github.io/hugo-dev/categories/large_bin/</guid>
         <description></description>
         </item>
         <item>
         <title>Pwn</title>
         <link>https://zz-zz-955.github.io/hugo-dev/categories/pwn/</link>
-        <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0000</pubDate>
         
         <guid>https://zz-zz-955.github.io/hugo-dev/categories/pwn/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>堆</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/categories/%E5%A0%86/</link>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://zz-zz-955.github.io/hugo-dev/categories/%E5%A0%86/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>技巧</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/categories/%E6%8A%80%E5%B7%A7/</link>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://zz-zz-955.github.io/hugo-dev/categories/%E6%8A%80%E5%B7%A7/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Gdb</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/categories/gdb/</link>
+        <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://zz-zz-955.github.io/hugo-dev/categories/gdb/</guid>
         <description></description>
         </item>
         <item>
@@ -45,14 +69,6 @@
         <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
         
         <guid>https://zz-zz-955.github.io/hugo-dev/categories/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>技巧</title>
-        <link>https://zz-zz-955.github.io/hugo-dev/categories/%E6%8A%80%E5%B7%A7/</link>
-        <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
-        
-        <guid>https://zz-zz-955.github.io/hugo-dev/categories/%E6%8A%80%E5%B7%A7/</guid>
         <description></description>
         </item>
         <item>
