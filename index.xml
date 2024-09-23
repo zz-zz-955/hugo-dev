@@ -15,9 +15,9 @@
         <guid>https://zz-zz-955.github.io/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/</guid>
         <description>&lt;p&gt;参考教材：人民邮电出版社**&lt;code&gt;《Python编程基础 第2版|微课版》&lt;/code&gt;**，书号：&lt;code&gt;978-7-115-57563-0&lt;/code&gt;&lt;/p&gt;
 &lt;h1 id=&#34;python包下载并安装&#34;&gt;python包下载并安装
-&lt;/h1&gt;&lt;h2 id=&#34;步骤一访问python官网httpswwwpythonorg下载安装包&#34;&gt;&lt;strong&gt;步骤一&lt;/strong&gt;：访问&lt;a class=&#34;link&#34; href=&#34;https://www.python.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;python官网&lt;/a&gt;，下载安装包
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348.png&#34;
+&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;步骤一&lt;/strong&gt;：访问&lt;a class=&#34;link&#34; href=&#34;https://www.python.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;python官网&lt;/a&gt;，下载安装包&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348.png&#34;
 	width=&#34;1990&#34;
 	height=&#34;901&#34;
 	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348_hu16042739526499791801.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348_hu6958038690036435335.png 1024w&#34;
@@ -265,8 +265,8 @@
 	
 &gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h4 id=&#34;vscode-插件安装python&#34;&gt;vscode 插件安装(python)
-&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;步骤三&lt;/strong&gt;：安装适合开发python的vs code插件。&lt;/p&gt;
+&lt;h2 id=&#34;vscode-插件安装python&#34;&gt;vscode 插件安装(python)
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;步骤三&lt;/strong&gt;：安装适合开发python的vs code插件。&lt;/p&gt;
 &lt;p&gt;① 安装&lt;code&gt;简体中文&lt;/code&gt;插件，在插件商店输入&lt;code&gt;chinese&lt;/code&gt;，按回车键搜索，并点击&lt;code&gt;Install&lt;/code&gt;安装&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016.png&#34;
 	width=&#34;776&#34;
@@ -401,7 +401,7 @@
 		data-flex-grow=&#34;275&#34;
 		data-flex-basis=&#34;660px&#34;
 	
-&gt;&lt;/p&gt;
+&gt;/&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;步骤三&lt;/strong&gt;：在编辑框内输入下列代码。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
