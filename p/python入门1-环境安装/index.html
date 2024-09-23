@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一起来简单学习python基础知识吧">
+<title>python入门1-环境安装</title>
+
+<link rel='canonical' href='https://zz-zz-955.github.io/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/'>
+
+<link rel="stylesheet" href="/hugo-dev/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="python入门1-环境安装">
+<meta property='og:description' content="一起来简单学习python基础知识吧">
+<meta property='og:url' content='https://zz-zz-955.github.io/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/'>
+<meta property='og:site_name' content='学习笔记博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-23T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="python入门1-环境安装">
+<meta name="twitter:description" content="一起来简单学习python基础知识吧">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/hugo-dev/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/hugo-dev/img/avatar_hu6139835954921719983.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤣</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/hugo-dev">学习笔记博客</a></h1>
+            <h2 class="site-description">欢迎来到我的博客，本博客主要记录计算机专业相关的学习笔记，主要是以CTF-PWN为主</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/hugo-dev/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/hugo-dev/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#python包下载并安装">python包下载并安装</a></li>
+    <li><a href="#vs-code代码编写工具安装">Vs Code代码编写工具安装</a>
+      <ol>
+        <li><a href="#vscode-插件安装python">vscode 插件安装(python)</a></li>
+      </ol>
+    </li>
+    <li><a href="#运行第一个python程序打印helloworld">运行第一个python程序——打印<code>Hello,World</code></a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/hugo-dev/categories/python/" >
+                Python
+            </a>
+        
+            <a href="/hugo-dev/categories/%E5%9F%BA%E7%A1%80/" >
+                基础
+            </a>
+        
+            <a href="/hugo-dev/categories/%E5%AE%89%E8%A3%85/" >
+                安装
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/">python入门1-环境安装</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            一起来简单学习python基础知识吧
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-23</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>参考教材：人民邮电出版社**<code>《Python编程基础 第2版|微课版》</code>**，书号：<code>978-7-115-57563-0</code></p>
+<h2 id="python包下载并安装">python包下载并安装
+</h2><p><strong>步骤一</strong>：访问<a class="link" href="https://www.python.org/"  target="_blank" rel="noopener"
+    >python官网</a>，下载安装包</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348.png"
+	width="1990"
+	height="901"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348_hu16042739526499791801.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348_hu6958038690036435335.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240923164108348"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="530px"
+	
+></p>
+<p><strong>步骤二</strong>：此处我们寻找<strong>python3.8.5</strong>安装包下载（<em>推荐安装最新版的python，截至本文档的编写时，python最新的版本为<strong>3.12.6</strong></em>）</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164355820.png"
+	width="1758"
+	height="612"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164355820_hu15920655381713673369.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164355820_hu13423428174352191066.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240923164355820"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="287"
+		data-flex-basis="689px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164522489.png"
+	width="1887"
+	height="745"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164522489_hu13853720469489022828.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164522489_hu10034882607508437306.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240923164522489"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="253"
+		data-flex-basis="607px"
+	
+></p>
+<p><strong>步骤三</strong>：双击已下载的安装包，按照下面步骤进行安装</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165437373.png"
+	width="667"
+	height="409"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165437373_hu16203025014958773420.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165437373_hu11587044114645315415.png 1024w"
+	loading="lazy"
+	
+		alt="采用自定义安装"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="391px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165548864.png"
+	width="663"
+	height="408"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165548864_hu667285604939088985.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165548864_hu4010581790041634343.png 1024w"
+	loading="lazy"
+	
+		alt="安装相关工具"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="390px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165720904.png"
+	width="664"
+	height="413"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165720904_hu14909188604129778423.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165720904_hu1296391378368023821.png 1024w"
+	loading="lazy"
+	
+		alt="高级选项设置"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="385px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165736485.png"
+	width="655"
+	height="405"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165736485_hu7933574099309353230.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165736485_hu2059140192550369146.png 1024w"
+	loading="lazy"
+	
+		alt="等待安装"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165922559.png"
+	width="660"
+	height="408"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165922559_hu15982389886860123104.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165922559_hu17423439166977657745.png 1024w"
+	loading="lazy"
+	
+		alt="安装成功的显示界面"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<p><strong>步骤四</strong>：打开<code>命令提示符</code>，输入<code>python</code>，若出现下面信息，则代表安装成功</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170126489.png"
+	width="1035"
+	height="318"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170126489_hu7167138165104745026.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170126489_hu3139840134719423853.png 1024w"
+	loading="lazy"
+	
+		alt="正常运行python"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="325"
+		data-flex-basis="781px"
+	
+></p>
+<h2 id="vs-code代码编写工具安装">Vs Code代码编写工具安装
+</h2><p><code>此处不介绍pyCharm工具的安装和使用，初学者使用该工具过于臃肿，建议熟悉python的开发后，再学习pycharm工具使用方式</code></p>
+<p><strong>步骤一</strong>：访问<a class="link" href="https://code.visualstudio.com/"  target="_blank" rel="noopener"
+    >Vs Code官网</a>，下载软件安装包</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170534258.png"
+	width="2021"
+	height="1029"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170534258_hu17445796460853713778.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170534258_hu7982034998591860582.png 1024w"
+	loading="lazy"
+	
+		alt="vs code官网界面"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="196"
+		data-flex-basis="471px"
+	
+></p>
+<p>点击后，会自动下载最新版的vs code工具。</p>
+<p><strong>步骤二</strong>：双击安装包，安装vs code</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183737930.png"
+	width="602"
+	height="459"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183737930_hu11259516103108084437.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183737930_hu16414215814347873620.png 1024w"
+	loading="lazy"
+	
+		alt="vs code许可协议"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="314px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183836362.png"
+	width="593"
+	height="457"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183836362_hu12317430059097230494.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183836362_hu3184952715400576345.png 1024w"
+	loading="lazy"
+	
+		alt="选择安装路径"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="311px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183943162.png"
+	width="588"
+	height="465"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183943162_hu12881367073984466858.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183943162_hu1393364797725348946.png 1024w"
+	loading="lazy"
+	
+		alt="选择开始菜单文件夹"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="126"
+		data-flex-basis="303px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184014147.png"
+	width="594"
+	height="459"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184014147_hu1049001327246166291.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184014147_hu7755892862323854722.png 1024w"
+	loading="lazy"
+	
+		alt="选择附加任务"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="310px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184110170.png"
+	width="591"
+	height="459"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184110170_hu16730615342510951313.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184110170_hu15704925480129272861.png 1024w"
+	loading="lazy"
+	
+		alt="准备安装"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="128"
+		data-flex-basis="309px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184125667.png"
+	width="589"
+	height="455"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184125667_hu12569495944805004907.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184125667_hu17195717522675829552.png 1024w"
+	loading="lazy"
+	
+		alt="正在安装"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="310px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184146538.png"
+	width="593"
+	height="455"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184146538_hu1598204549184339818.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184146538_hu5338030823546307172.png 1024w"
+	loading="lazy"
+	
+		alt="安装完毕"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="130"
+		data-flex-basis="312px"
+	
+></p>
+<hr>
+<h3 id="vscode-插件安装python">vscode 插件安装(python)
+</h3><p><strong>步骤三</strong>：安装适合开发python的vs code插件。</p>
+<p>① 安装<code>简体中文</code>插件，在插件商店输入<code>chinese</code>，按回车键搜索，并点击<code>Install</code>安装</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016.png"
+	width="776"
+	height="481"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016_hu17764489319004003595.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016_hu9449849287984720785.png 1024w"
+	loading="lazy"
+	
+		alt="通过插件商店安装"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="387px"
+	
+></p>
+<p>安装完毕后，右下角出现下面界面，点击按钮重启vs code编辑器</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184523217.png"
+	width="478"
+	height="136"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184523217_hu4708090621859627215.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184523217_hu13998422601913629621.png 1024w"
+	loading="lazy"
+	
+		alt="点击按钮更换语言"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="351"
+		data-flex-basis="843px"
+	
+></p>
+<p>vs code重启后，界面语言变成简体中文。</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184605370.png"
+	width="1282"
+	height="572"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184605370_hu15362961582202797187.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184605370_hu17236099687162429866.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240923184605370"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="537px"
+	
+></p>
+<p>② 安装适合python开发的插件，在插件搜索栏输入<code>python</code></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184715619.png"
+	width="686"
+	height="372"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184715619_hu9155218438007302564.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184715619_hu6353967194592365639.png 1024w"
+	loading="lazy"
+	
+		alt="vs code推荐的python编写插件"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="442px"
+	
+></p>
+<p>安装完毕后，出现下面界面代表安装成功</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185040588.png"
+	width="648"
+	height="189"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185040588_hu16591739525187992142.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185040588_hu16844065441612993800.png 1024w"
+	loading="lazy"
+	
+		alt="python插件安装成功"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="342"
+		data-flex-basis="822px"
+	
+></p>
+<hr>
+<h2 id="运行第一个python程序打印helloworld">运行第一个python程序——打印<code>Hello,World</code>
+</h2><p>步骤一：在【菜单栏-&gt;文件-&gt;新建文本文件】，创建python脚本文件</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185626292.png"
+	width="481"
+	height="455"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185626292_hu13172036625423242796.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185626292_hu1178781089603823847.png 1024w"
+	loading="lazy"
+	
+		alt="创建文件"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="105"
+		data-flex-basis="253px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185700551.png"
+	width="630"
+	height="193"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185700551_hu13889841362276755748.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185700551_hu4032810976604887315.png 1024w"
+	loading="lazy"
+	
+		alt="新创建的脚本文件"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="783px"
+	
+></p>
+<p><strong>步骤二</strong>：在当前界面处按快捷键【Ctrl+s】，保存脚本文件，例如保存到桌面，如下图所示。</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185817232.png"
+	width="729"
+	height="426"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185817232_hu12620550002045593197.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185817232_hu14887860194936880043.png 1024w"
+	loading="lazy"
+	
+		alt="将文件保存到桌面"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="410px"
+	
+></p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185858546.png"
+	width="432"
+	height="157"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185858546_hu9512247107372833824.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185858546_hu8551635745412857068.png 1024w"
+	loading="lazy"
+	
+		alt="文件创建完毕"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="660px"
+	
+>/</p>
+<p><strong>步骤三</strong>：在编辑框内输入下列代码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 通过print函数，在终端输出&#39;Hello,World&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello,World&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>步骤四</strong>：根据下方图片效果，点击按钮执行已编写的python脚本。</p>
+<p><img src="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923190139380.png"
+	width="711"
+	height="555"
+	srcset="/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923190139380_hu3672347912444827326.png 480w, /hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923190139380_hu13920781054259314846.png 1024w"
+	loading="lazy"
+	
+		alt="运行编写的main.py脚本"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="128"
+		data-flex-basis="307px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 zz-zz-955
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/hugo-dev/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
