@@ -7,7 +7,430 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>zz-zz-955</copyright>
-        <lastBuildDate>Sun, 22 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 23 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>python入门1-环境安装</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/</link>
+        <pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://zz-zz-955.github.io/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/</guid>
+        <description>&lt;p&gt;参考教材：人民邮电出版社**&lt;code&gt;《Python编程基础 第2版|微课版》&lt;/code&gt;**，书号：&lt;code&gt;978-7-115-57563-0&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;python包下载并安装&#34;&gt;python包下载并安装
+&lt;/h1&gt;&lt;h2 id=&#34;步骤一访问python官网httpswwwpythonorg下载安装包&#34;&gt;&lt;strong&gt;步骤一&lt;/strong&gt;：访问&lt;a class=&#34;link&#34; href=&#34;https://www.python.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;python官网&lt;/a&gt;，下载安装包
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348.png&#34;
+	width=&#34;1990&#34;
+	height=&#34;901&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348_hu16042739526499791801.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164108348_hu6958038690036435335.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20240923164108348&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;530px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤二&lt;/strong&gt;：此处我们寻找&lt;strong&gt;python3.8.5&lt;/strong&gt;安装包下载（&lt;em&gt;推荐安装最新版的python，截至本文档的编写时，python最新的版本为&lt;strong&gt;3.12.6&lt;/strong&gt;&lt;/em&gt;）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164355820.png&#34;
+	width=&#34;1758&#34;
+	height=&#34;612&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164355820_hu15920655381713673369.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164355820_hu13423428174352191066.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20240923164355820&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;287&#34;
+		data-flex-basis=&#34;689px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164522489.png&#34;
+	width=&#34;1887&#34;
+	height=&#34;745&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164522489_hu13853720469489022828.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923164522489_hu10034882607508437306.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20240923164522489&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;253&#34;
+		data-flex-basis=&#34;607px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤三&lt;/strong&gt;：双击已下载的安装包，按照下面步骤进行安装&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165437373.png&#34;
+	width=&#34;667&#34;
+	height=&#34;409&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165437373_hu16203025014958773420.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165437373_hu11587044114645315415.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;采用自定义安装&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;163&#34;
+		data-flex-basis=&#34;391px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165548864.png&#34;
+	width=&#34;663&#34;
+	height=&#34;408&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165548864_hu667285604939088985.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165548864_hu4010581790041634343.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;安装相关工具&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;162&#34;
+		data-flex-basis=&#34;390px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165720904.png&#34;
+	width=&#34;664&#34;
+	height=&#34;413&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165720904_hu14909188604129778423.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165720904_hu1296391378368023821.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;高级选项设置&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;160&#34;
+		data-flex-basis=&#34;385px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165736485.png&#34;
+	width=&#34;655&#34;
+	height=&#34;405&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165736485_hu7933574099309353230.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165736485_hu2059140192550369146.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;等待安装&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;161&#34;
+		data-flex-basis=&#34;388px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165922559.png&#34;
+	width=&#34;660&#34;
+	height=&#34;408&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165922559_hu15982389886860123104.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923165922559_hu17423439166977657745.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;安装成功的显示界面&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;161&#34;
+		data-flex-basis=&#34;388px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤四&lt;/strong&gt;：打开&lt;code&gt;命令提示符&lt;/code&gt;，输入&lt;code&gt;python&lt;/code&gt;，若出现下面信息，则代表安装成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170126489.png&#34;
+	width=&#34;1035&#34;
+	height=&#34;318&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170126489_hu7167138165104745026.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170126489_hu3139840134719423853.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;正常运行python&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;325&#34;
+		data-flex-basis=&#34;781px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;vs-code代码编写工具安装&#34;&gt;Vs Code代码编写工具安装
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;此处不介绍pyCharm工具的安装和使用，初学者使用该工具过于臃肿，建议熟悉python的开发后，再学习pycharm工具使用方式&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤一&lt;/strong&gt;：访问&lt;a class=&#34;link&#34; href=&#34;https://code.visualstudio.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Vs Code官网&lt;/a&gt;，下载软件安装包&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170534258.png&#34;
+	width=&#34;2021&#34;
+	height=&#34;1029&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170534258_hu17445796460853713778.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923170534258_hu7982034998591860582.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;vs code官网界面&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;196&#34;
+		data-flex-basis=&#34;471px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;点击后，会自动下载最新版的vs code工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤二&lt;/strong&gt;：双击安装包，安装vs code&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183737930.png&#34;
+	width=&#34;602&#34;
+	height=&#34;459&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183737930_hu11259516103108084437.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183737930_hu16414215814347873620.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;vs code许可协议&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;131&#34;
+		data-flex-basis=&#34;314px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183836362.png&#34;
+	width=&#34;593&#34;
+	height=&#34;457&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183836362_hu12317430059097230494.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183836362_hu3184952715400576345.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;选择安装路径&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;311px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183943162.png&#34;
+	width=&#34;588&#34;
+	height=&#34;465&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183943162_hu12881367073984466858.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923183943162_hu1393364797725348946.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;选择开始菜单文件夹&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;126&#34;
+		data-flex-basis=&#34;303px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184014147.png&#34;
+	width=&#34;594&#34;
+	height=&#34;459&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184014147_hu1049001327246166291.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184014147_hu7755892862323854722.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;选择附加任务&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;310px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184110170.png&#34;
+	width=&#34;591&#34;
+	height=&#34;459&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184110170_hu16730615342510951313.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184110170_hu15704925480129272861.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;准备安装&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;128&#34;
+		data-flex-basis=&#34;309px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184125667.png&#34;
+	width=&#34;589&#34;
+	height=&#34;455&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184125667_hu12569495944805004907.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184125667_hu17195717522675829552.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;正在安装&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;310px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184146538.png&#34;
+	width=&#34;593&#34;
+	height=&#34;455&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184146538_hu1598204549184339818.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184146538_hu5338030823546307172.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;安装完毕&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;130&#34;
+		data-flex-basis=&#34;312px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;vscode-插件安装python&#34;&gt;vscode 插件安装(python)
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;步骤三&lt;/strong&gt;：安装适合开发python的vs code插件。&lt;/p&gt;
+&lt;p&gt;① 安装&lt;code&gt;简体中文&lt;/code&gt;插件，在插件商店输入&lt;code&gt;chinese&lt;/code&gt;，按回车键搜索，并点击&lt;code&gt;Install&lt;/code&gt;安装&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016.png&#34;
+	width=&#34;776&#34;
+	height=&#34;481&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016_hu17764489319004003595.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184419016_hu9449849287984720785.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;通过插件商店安装&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;161&#34;
+		data-flex-basis=&#34;387px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;安装完毕后，右下角出现下面界面，点击按钮重启vs code编辑器&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184523217.png&#34;
+	width=&#34;478&#34;
+	height=&#34;136&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184523217_hu4708090621859627215.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184523217_hu13998422601913629621.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;点击按钮更换语言&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;351&#34;
+		data-flex-basis=&#34;843px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;vs code重启后，界面语言变成简体中文。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184605370.png&#34;
+	width=&#34;1282&#34;
+	height=&#34;572&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184605370_hu15362961582202797187.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184605370_hu17236099687162429866.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20240923184605370&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;224&#34;
+		data-flex-basis=&#34;537px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;② 安装适合python开发的插件，在插件搜索栏输入&lt;code&gt;python&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184715619.png&#34;
+	width=&#34;686&#34;
+	height=&#34;372&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184715619_hu9155218438007302564.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923184715619_hu6353967194592365639.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;vs code推荐的python编写插件&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;442px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;安装完毕后，出现下面界面代表安装成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185040588.png&#34;
+	width=&#34;648&#34;
+	height=&#34;189&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185040588_hu16591739525187992142.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185040588_hu16844065441612993800.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;python插件安装成功&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;342&#34;
+		data-flex-basis=&#34;822px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;运行第一个python程序打印helloworld&#34;&gt;运行第一个python程序——打印&lt;code&gt;Hello,World&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;步骤一：在【菜单栏-&amp;gt;文件-&amp;gt;新建文本文件】，创建python脚本文件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185626292.png&#34;
+	width=&#34;481&#34;
+	height=&#34;455&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185626292_hu13172036625423242796.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185626292_hu1178781089603823847.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;创建文件&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;105&#34;
+		data-flex-basis=&#34;253px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185700551.png&#34;
+	width=&#34;630&#34;
+	height=&#34;193&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185700551_hu13889841362276755748.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185700551_hu4032810976604887315.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;新创建的脚本文件&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;326&#34;
+		data-flex-basis=&#34;783px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤二&lt;/strong&gt;：在当前界面处按快捷键【Ctrl+s】，保存脚本文件，例如保存到桌面，如下图所示。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185817232.png&#34;
+	width=&#34;729&#34;
+	height=&#34;426&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185817232_hu12620550002045593197.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185817232_hu14887860194936880043.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;将文件保存到桌面&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;171&#34;
+		data-flex-basis=&#34;410px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185858546.png&#34;
+	width=&#34;432&#34;
+	height=&#34;157&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185858546_hu9512247107372833824.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923185858546_hu8551635745412857068.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;文件创建完毕&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;275&#34;
+		data-flex-basis=&#34;660px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤三&lt;/strong&gt;：在编辑框内输入下列代码。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 通过print函数，在终端输出&amp;#39;Hello,World&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Hello,World&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;步骤四&lt;/strong&gt;：根据下方图片效果，点击按钮执行已编写的python脚本。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923190139380.png&#34;
+	width=&#34;711&#34;
+	height=&#34;555&#34;
+	srcset=&#34;https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923190139380_hu3672347912444827326.png 480w, https://zz-zz-955.github.io/hugo-dev/hugo-dev/p/python%E5%85%A5%E9%97%A81-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/image-20240923190139380_hu13920781054259314846.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;运行编写的main.py脚本&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;128&#34;
+		data-flex-basis=&#34;307px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>【转载】how2heap-2.23-08-large_bin_attack</title>
         <link>https://zz-zz-955.github.io/hugo-dev/p/%E8%BD%AC%E8%BD%BDhow2heap-2.23-08-large_bin_attack/</link>
         <pubDate>Sun, 22 Sep 2024 00:00:00 +0000</pubDate>
