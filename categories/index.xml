@@ -7,7 +7,23 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>zz-zz-955</copyright>
-        <lastBuildDate>Mon, 23 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 24 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zz-zz-955.github.io/hugo-dev/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Blog</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/categories/blog/</link>
+        <pubDate>Tue, 24 Sep 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://zz-zz-955.github.io/hugo-dev/categories/blog/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Markdown</title>
+        <link>https://zz-zz-955.github.io/hugo-dev/categories/markdown/</link>
+        <pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://zz-zz-955.github.io/hugo-dev/categories/markdown/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Python</title>
         <link>https://zz-zz-955.github.io/hugo-dev/categories/python/</link>
         <pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate>
@@ -21,14 +37,6 @@
         <pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate>
         
         <guid>https://zz-zz-955.github.io/hugo-dev/categories/%E5%AE%89%E8%A3%85/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>基础</title>
-        <link>https://zz-zz-955.github.io/hugo-dev/categories/%E5%9F%BA%E7%A1%80/</link>
-        <pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate>
-        
-        <guid>https://zz-zz-955.github.io/hugo-dev/categories/%E5%9F%BA%E7%A1%80/</guid>
         <description></description>
         </item>
         <item>

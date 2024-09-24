@@ -1,0 +1,32 @@
+*{
+    margin:0px;
+    padding:0px;
+    border:0px
+}
+/* 代码高亮块 */
+.high_light_box{
+    margin:30px 0;
+    padding:20px 30px;
+    border-radius: 5px;
+    border-left-width: 5px;
+    border-style:solid;
+}
+
+/* 高亮块下的标题 */
+.high_light_box > .p_title{
+    font-weight: 600;
+}
+
+/* 绿色高亮块 */
+.high_light_box_green{
+    background-color:#f0f9eb;
+    border-left-color:#67c23a;
+}
+
+/* 蓝色高亮块 */
+.high_light_box_blue{
+    background-color:#ecf5ff;
+    border-left-color:#409eff;
+}
+
+/* 后续更多样式尽情期待... */
